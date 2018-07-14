@@ -1,0 +1,112 @@
+﻿
+@using CabgemininMVC.Models;
+@model EmployeeViewModel
+@*@model IList<CabgemininMVC.Models.EmployeeModel>*@
+
+@{
+    ViewBag.Title = "Index";   
+    WebGrid grid = new WebGrid(Model.EmployeeList, rowsPerPage: 10, canSort: true);
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+   
+@*<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Age)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Branch_Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Deptt_Id)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Age)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Branch_Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Deptt_Id)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>*@
+
+<div class="panel-body">
+    <hr>
+    <div class="table-responsive" id="spListTable">
+        @grid.GetHtml(
+                                    tableStyle: "table table-bordered table-success table-striped nomargin", // applying style on grid
+                                    mode: WebGridPagerModes.All, //paging to grid
+                                    firstText: "<< First",
+                                    previousText: "< Prev",
+                                    nextText: "Next >",
+                                    lastText: "Last >>",
+                                    columns: new[]  // colums in grid
+                                    {
+                                        grid.Column(columnName:"Name",header:"Name",format:@<text>@item.Name</text>),
+                                         grid.Column(columnName:"Email",header:"Email",format:@<text>@item.Email</text>),
+                                         grid.Column(columnName:"Age",header:"Age",format:@<text>@item.Age</text>),
+                                        grid.Column(columnName:"BranchName",header:"BranchName",format:@<text>@item.BranchName</text>),
+
+                                      //  grid.Column( header:"Active",format:@<text> @{var cls=""; if(item.Status==true) {cls="checked='checked'"; }}<input type="checkbox" disabled="disabled" @cls value="@item.Id" id="chk_@item.Id" class="chkBoxGroup" /></text>),
+                                       @*grid.Column(header:" ", format:@<text><a href="@Url.Action("Edit", null, new { Id = item.Id },this.Request.Url.Scheme)" class="btn btn-link btn-xs font-blue"><i class="fa fa-edit">&nbsp;</i>Edit</a> <a href="#" onclick="deleteRec('@item.Id')" class="btn btn-link btn-xs font-red"><i class="fa fa-remove">&nbsp;</i>Delete</a></text>),*@
+                                      grid.Column(header:" ", format:@<text><a href="@Url.Action("Edit", null, new { Id = item.Id },this.Request.Url.Scheme)" class="btn btn-link btn-xs font-blue"><i class="fa fa-edit">&nbsp;</i>Edit</a> <a href="#" onclick="deleteRec('@item.Id')" class="btn btn-link btn-xs font-red"><i class="fa fa-remove">&nbsp;</i>Delete</a></text>),
+
+                                    })
+    </div>
+
+</div>
+
+
+<script>
+
+    function deleteRec(Id)
+    {
+        if (confirm('Are you sure to delete the selected record?')) {
+            $('#txId').val(Id);
+            $('#frmDel').submit();
+        }
+    }
+
+
+</script>
+
+<div style="display:none;">
+    @using (Html.BeginForm("Delete", "LevelMaster", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmDel" }))
+    {
+        <input type="hidden" id="txId" name="Id" />
+
+    }
+</div>  
+

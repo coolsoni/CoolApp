@@ -1,0 +1,118 @@
+﻿@model CabgemininMVC.Models.EmployeeModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <ol class="breadcrumb breadcrumb-quirk">
+        <li><a href="@Url.Action("Index", "Teachers", new { area = "" })"><i class="fa fa-home mr5"></i> DashBoard</a></li>
+        <li class="active">Masters</li>
+        <li><a href="@Url.Action("Index")">Level</a></li>
+        <li class="active"> Edit</li>
+    </ol>
+
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading nopaddingbottom">
+                      
+                <div class="col-md-4 head-btn">
+                    <button type="submit" name="save" class="btn btn-sm  btn-primary tooltips" value="Save" data-original-title="Save" title="" data-placement="top" data-toggle="tooltip"><i class="fa fa-save">&nbsp;</i>Save</button>
+                    <button type="submit" name="save-continue" class="btn btn-sm  btn-primary tooltips" value="Save & Continue Edit" data-original-title="Save and Continue" title="" data-placement="top" data-toggle="tooltip"><i class="fa fa-floppy-o">&nbsp;</i>Save and Continue</button>
+                    <a href="@Url.Action("Index")" class="btn btn-sm   btn-danger tooltips" data-original-title="Back to List" title="" data-placement="top" data-toggle="tooltip"><i class="fa fa-backward">&nbsp;</i>Back to List</a>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+                <hr>
+                <div id="basicForm" class="form-horizontal">
+                    @Html.Partial("_CreateOrUpdate", Model)
+                </div>
+            </div><!-- panel-body -->
+        </div><!-- panel -->
+    </div>
+
+}
+
+
+@*@model CabgemininMVC.Models.EmployeeViewModel
+@using CabgemininMVC.Controllers; 
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>EmployeeModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label class="col-sm-4 ">Branch </label>
+            <div class="col-sm-8">
+
+                @Html.DropDownListFor(model => model.Branch_Id, (SelectList)ViewBag.branch, "--Select Subject--", new { @class = "form-control", @required = "Please Select the Subject...." })
+            </div>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label class="col-sm-4 ">Deptt </label>
+            <div class="col-sm-8">
+                @Html.DropDownListFor(model => model.Deptt_Id, (SelectList)ViewBag.Deptt, "--Select Subject--", new { @class = "form-control", @required = "Please Select the Subject...." })
+
+
+                @Html.ValidationMessageFor(model => model.Deptt_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>     
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

@@ -1,0 +1,153 @@
+﻿@model CabgemininMVC.Models.StudentViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>StudentModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Branch_Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.Branch_Id, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.Branch_Id, Model.AvailbleBranch, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Branch_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Contact, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.BranchName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.BranchName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BranchName, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Deptt_Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.Deptt_Id, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.Deptt_Id, Model.AvailableDeptt, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Deptt_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.DepartmentName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DepartmentName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DepartmentName, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Section_Id, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.Section_Id, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.Section_Id, Model.AvailbleSection, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Section_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#@Html.FieldIdFor(r => r.Branch_Id)').change(function () {
+            var selectedItm = $(this).val();
+            $.ajax({
+                url: "@(Url.Action("GetDepttbyBranchId", "Student"))",
+                type: 'POST',
+                cache: false,
+                data: {
+                    "Branch_Id": selectedItm
+                },
+                success: function (result) {
+                    var markup = "";
+                    for (var x = 0; x < result.length; x++) {
+                        markup += "<option value=" + result[x].Value + ">" + result[x].Text + "</option>";
+                    }
+                    $('#@Html.FieldIdFor(r => r.Deptt_Id)').html(markup).show();
+                }
+            });
+        });
+    });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('#@Html.FieldIdFor(r=>r.Deptt_Id)').change(function () {
+            var selectedItm = $(this).val();
+            $.ajax({
+                url: "@(Url.Action("GetSectionbyDepttId", "Student"))",
+                type: 'POST',
+                cache: false,
+                data: {
+                    "Deptt_Id": selectedItm
+                },
+                success: function (result) {
+                    var markup = "";
+                    for (var x = 0; x < result.length; x++) {
+                        markup += "<opation value=" + result[x].Value + ">" + result[x].Text + "</option>";
+                    }
+                    $('#@Html.FieldIdFor(r => r.Section_Id)').html(markup).show();
+                }
+
+            });
+        });
+    });
+</script>

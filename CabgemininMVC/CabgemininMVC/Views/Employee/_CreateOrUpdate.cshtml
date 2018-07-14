@@ -1,0 +1,193 @@
+﻿@model CabgemininMVC.Models.EmployeeModel
+@using CabgemininMVC.Controllers;
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>EmployeeModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class=" col-md-6 form-group">
+            @*@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="=col-sm-4">Name</label>
+            <div class="col-sm-8">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control leveles" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class=" col-md-6 form-group">
+            @*@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="=col-sm-4">Email</label>
+            <div class="col-sm-8">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6 form-group">
+            @*@Html.LabelFor(model => model.Age, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="col-sm-4">Age</label>
+            <div class="col-sm-8">
+                @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="col-md-6 form-group">
+            <label class="col-sm-4 ">Branch </label>
+            <div class="col-sm-8">
+                @*@Html.DropDownListFor(model => model.Branch_Id, Model.AvailbleBranch,new { @class = "form-control" })*@
+
+                @Html.DropDownListFor(model => model.Branch_Id, (SelectList)ViewBag.branch, "--Select Subject--", new { @class = "form-control", @required = "Please Select the Subject...." })
+                @*@Html.ValidationMessageFor(model => model.Branch_Id, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+
+        <div class="col-md-6 form-group">
+            <label class="col-sm-4 ">Deptt </label>
+            <div class="col-sm-8">
+                @Html.DropDownListFor(model => model.Deptt_Id, (SelectList)ViewBag.Deptt, "--Select Subject--", new { @class = "form-control", @required = "Please Select the Subject...." })
+
+
+                @*@Html.DropDownListFor(model => model.Deptt_Id, Model.AvailableDeptt, new { @class = "form-control" })*@
+                @Html.ValidationMessageFor(model => model.Deptt_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label class="col-sm-4 ">Section </label>
+            <div class="col-sm-8">
+                @*@Html.DropDownListFor(model => model.Section_Id, Model.AvailbleSection, new { @class = "form-control" })*@
+                @Html.DropDownListFor(model => model.Section_Id, (SelectList)ViewBag.section, "--Select Section--", new { @class = "form-control", @required = "Please Select the Subject...." })
+                @Html.ValidationMessageFor(model => model.Section_Id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        @*<div class="form-group">
+
+
+                <div class="col-md-10">
+                    <label class="col-sm-2">Branch </label>
+                   @Html.EditorFor(model => model.Branch_Id, new { htmlAttributes = new { @class = "form-control" } })*
+                    @Html.DropDownListFor(model => model.Branch_Id, Model.AvailbleBranch,"---Select---")
+
+                </div>
+            </div>*@
+
+        @*<div class="form-group">
+
+
+                <div class="col-md-10">
+                    <label class="col-sm-2">Department </label>
+                    @Html.EditorFor(model => model.Deptt_Id, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.DropDownListFor(Model=>Model.Deptt_Id,Model.AvailableDeptt ,"---Select---")
+                    @Html.ValidationMessageFor(model => model.AvailableDeptt, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    $(document).ready(function () {
+        $('#@Html.FieldIdFor(r => r.Branch_Id)').change(function () {
+            var selectedItm = $(this).val();
+            $.ajax({
+                url: "@(Url.Action("GetDepttbyBranchId", "Employee"))",
+                type: 'POST',
+                cache: false,
+                data: {
+                    "Branch_Id": selectedItm
+                },
+                success: function (result) {
+                    var markup = "";
+                    for (var x = 0; x < result.length; x++) {
+                        markup += "<option value=" + result[x].Value + ">" + result[x].Text + "</option>";
+                    }
+                    $('#@Html.FieldIdFor(r => r.Deptt_Id)').html(markup).show();
+                }
+            });
+        });
+    });
+
+
+</script>
+<script>
+    $(document).ready(function () {
+        $('#@Html.FieldIdFor(r=>r.Deptt_Id)').change(function () {
+            var selectedItm = $(this).val();
+            $.ajax({
+                url: "@(Url.Action("GetSectionbyDepttId", "Employee"))",
+                type: 'POST',
+                cache: false,
+                data: {
+                    "Deptt_Id": selectedItm
+                },
+                success: function (result) {
+                    var markup = "";
+                    for (var x = 0; x < result.length; x++) {
+                        markup += "<opation value=" + result[x].Value + ">" + result[x].Text + "</option>";
+                    }
+                    $('#@Html.FieldIdFor(r => r.Section_Id)').html(markup).show();
+                }
+               
+            });
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $.ajax({
+            url: '@Url.Action("GetAutoSearch", "Employee")',
+            type: 'POST',
+            cache: false,
+            data: {},
+            success: function (data) {
+
+                var markup = [];
+                for (var x = 0; x < data.length; x++) {
+                    markup.push(data[x].Text)
+                }
+                $(".leveles").autocomplete({
+                    source: function (request, response) {
+                        var matches = $.map(markup, function (acItem) {
+                            if (acItem.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+                                return acItem;
+                            }
+                        });
+                        response(matches);
+                    }
+                });
+            }
+            //,
+            //error: function (result) {
+            //    alert('Error Occured')
+            //}
+        });
+    });
+</script>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
